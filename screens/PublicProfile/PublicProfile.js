@@ -18,7 +18,7 @@ import StreamChat from "./StreamChat/StreamChat";
 
 const PublicProfile = ({ route, navigation }) => {
   const [loading, setLoading] = useState(true);
-  const [reminding, setReminding] = useState(false);
+  const [subscribtionStatus, setSubscribtionStatus] = useState(false);
 
   const [followingStatus, setFollowingStatus] = useState("");
 
@@ -112,6 +112,10 @@ const PublicProfile = ({ route, navigation }) => {
     },
   });
 
+  const BellIcon = (props) => (
+    <Icon {...props} name={subscribtionStatus ? "bell" : "bell-outline"} />
+  );
+
   useEffect(() => {
     getFollowStatus(item.username)
       .then((res) => {
@@ -184,7 +188,7 @@ const PublicProfile = ({ route, navigation }) => {
           style={{
             height: windowHeight * 0.1,
             flexDirection: "row",
-            backgroundColor: "#222B45",
+            backgroundColor: "#222b45",
             justifyContent: "space-between",
           }}
         >
@@ -229,7 +233,7 @@ const PublicProfile = ({ route, navigation }) => {
               alignItems: "center",
               justifyContent: "space-between",
               paddingRight: 15,
-              width: "43%",
+              width: "42%",
             }}
           >
             <TouchableOpacity onPress={followUnfollowHandler}>
@@ -242,21 +246,14 @@ const PublicProfile = ({ route, navigation }) => {
               />
             </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => setReminding(!reminding)}>
-              <Icon
-                fill="#fff"
-                style={styles.icon}
-                name={reminding ? "bell" : "bell-outline"}
-              />
-            </TouchableOpacity>
             <TouchableOpacity>
               <Button
+                accessoryLeft={BellIcon}
                 appearance="outline"
-                status="control"
+                status={subscribtionStatus ? "basic" : "control"}
                 size="tiny"
-                // style={{}}
               >
-                Subscribe
+                {subscribtionStatus ? "Subscribed" : "Subscribe"}
               </Button>
             </TouchableOpacity>
           </View>

@@ -1,16 +1,13 @@
 import axios from "axios";
 import Config from "react-native-config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { writeMessageAsNotification } from "./Notifications";
 
-export const followUnfollow = async (follow_status, username) => {
+export const followUnfollow = async (follow_status, streamerUsername) => {
   const type = follow_status === "following" ? "unfollow" : "follow";
 
   // const data = new FormData();
   // data.append("username", username);
-
-  // if (follow_status !== "follow") {
-  //   writeMessageAsNotification(current_user.username + " just followed!");
-  // }
 
   try {
     const value = await AsyncStorage.getItem("userData");
@@ -21,10 +18,20 @@ export const followUnfollow = async (follow_status, username) => {
       return await axios({
         method: "post",
         url: `${Config.REACT_APP_TOOT_BACKEND}followers/${type}?access_token=${userData.access_token}`,
-        data: { username: username },
-      }).catch((err) => {
-        alert(err.message);
-      });
+        data: { username: streamerUsername },
+      })
+        .then((res) => {
+          if (follow_status !== "following") {
+            writeMessageAsNotification(
+              `${userData.username} just followed!`,
+              streamerUsername,
+              userData.access_token
+            );
+          }
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
     }
   } catch (error) {
     console.log(error);
