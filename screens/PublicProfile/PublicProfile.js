@@ -198,7 +198,7 @@ const PublicProfile = ({ route, navigation }) => {
               paddingLeft: 15,
             }}
           >
-            <Text style={{ ...FONTS.body2, fontWeight: "bold" }}>
+            <Text style={{ ...FONTS.body3, fontWeight: "bold" }}>
               {item.title}
             </Text>
             <View
@@ -220,7 +220,7 @@ const PublicProfile = ({ route, navigation }) => {
                 style={{
                   color: COLORS.white,
                   marginLeft: 5,
-                  ...FONTS.body3,
+                  ...FONTS.body4,
                 }}
               >
                 {item.username}

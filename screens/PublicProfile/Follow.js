@@ -17,7 +17,7 @@ export const followUnfollow = async (follow_status, streamerUsername) => {
 
       return await axios({
         method: "post",
-        url: `${Config.REACT_APP_TOOT_BACKEND}followers/${type}?access_token=${userData.access_token}`,
+        url: `${Config.REACT_APP_TOOT_BACKEND}followers/${type}?access_token=${userData["access_token"]}`,
         data: { username: streamerUsername },
       })
         .then((res) => {
@@ -25,7 +25,7 @@ export const followUnfollow = async (follow_status, streamerUsername) => {
             writeMessageAsNotification(
               `${userData.username} just followed!`,
               streamerUsername,
-              userData.access_token
+              userData["access_token"]
             );
           }
         })
