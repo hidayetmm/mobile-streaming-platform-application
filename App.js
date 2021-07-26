@@ -23,12 +23,11 @@ import {
   StyleSheet,
   useColorScheme,
 } from "react-native";
-import Home from "./screens/Home/Home";
 import Header from "./navigation/Header";
 import { COLORS } from "./constants";
 import Login from "./navigation/Login/LoginModal";
-import PublicProfile from "./screens/PublicProfile/PublicProfile";
 import { navigationRef } from "./navigation/RootNavigation";
+import { InAppNotificationProvider } from "react-native-in-app-notification";
 
 const Stack = createStackNavigator();
 
@@ -84,39 +83,41 @@ const App = () => {
   }, []);
 
   return (
-    <Context.Provider
-      value={{
-        userDetails: userDetails,
-        setUserDetails: (userData) => setUserDetails(userData),
-        setModalVisible: setVisible,
-        loggedIn: loggedIn,
-        setLoggedIn: (val) => {
-          if (val === false) {
-            AsyncStorage.clear();
-          }
-          setLoggedIn(val);
-        },
-      }}
-    >
-      <IconRegistry icons={EvaIconsPack} />
-      <ApplicationProvider {...eva} theme={eva.dark}>
-        <SafeAreaView style={backgroundStyle}>
-          <StatusBar
-            barStyle={isDarkMode ? "light-content" : "light-content"}
-          />
-          <Header />
-          {visible && <Login setVisible={(value) => setVisible(value)} />}
-        </SafeAreaView>
-        <NavigationContainer ref={navigationRef} theme={MyTheme}>
-          <Stack.Navigator
-            screenOptions={{ headerShown: false }}
-            initialRouteName="Home"
-          >
-            <Stack.Screen name="Home" component={Tabs} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </ApplicationProvider>
-    </Context.Provider>
+    <InAppNotificationProvider>
+      <Context.Provider
+        value={{
+          userDetails: userDetails,
+          setUserDetails: (userData) => setUserDetails(userData),
+          setModalVisible: setVisible,
+          loggedIn: loggedIn,
+          setLoggedIn: (val) => {
+            if (val === false) {
+              AsyncStorage.clear();
+            }
+            setLoggedIn(val);
+          },
+        }}
+      >
+        <IconRegistry icons={EvaIconsPack} />
+        <ApplicationProvider {...eva} theme={eva.dark}>
+          <SafeAreaView style={backgroundStyle}>
+            <StatusBar
+              barStyle={isDarkMode ? "light-content" : "light-content"}
+            />
+            <Header />
+            {visible && <Login setVisible={(value) => setVisible(value)} />}
+          </SafeAreaView>
+          <NavigationContainer ref={navigationRef} theme={MyTheme}>
+            <Stack.Navigator
+              screenOptions={{ headerShown: false }}
+              initialRouteName="Home"
+            >
+              <Stack.Screen name="Home" component={Tabs} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </ApplicationProvider>
+      </Context.Provider>
+    </InAppNotificationProvider>
   );
 };
 

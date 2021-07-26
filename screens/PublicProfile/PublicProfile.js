@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { withInAppNotification } from "react-native-in-app-notification";
 import { getFollowStatus, followUnfollow } from "./Follow";
 import {
   StyleSheet,
@@ -9,6 +10,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 import { Button, Card, Layout, Text, Icon, Input } from "@ui-kitten/components";
 
@@ -16,9 +18,9 @@ import { images, icons, SIZES, FONTS, COLORS } from "../../constants";
 import Video from "react-native-video";
 import StreamChat from "./StreamChat/StreamChat";
 
-const PublicProfile = ({ route, navigation }) => {
+const PublicProfile = ({ route, navigation, showNotification }) => {
   const [loading, setLoading] = useState(true);
-  const [subscribtionStatus, setSubscribtionStatus] = useState(false);
+  const [subscriptionStatus, setSuscriptionStatus] = useState(false);
 
   const [followingStatus, setFollowingStatus] = useState("");
 
@@ -113,7 +115,7 @@ const PublicProfile = ({ route, navigation }) => {
   });
 
   const BellIcon = (props) => (
-    <Icon {...props} name={subscribtionStatus ? "bell" : "bell-outline"} />
+    <Icon {...props} name={subscriptionStatus ? "bell" : "bell-outline"} />
   );
 
   useEffect(() => {
@@ -250,10 +252,21 @@ const PublicProfile = ({ route, navigation }) => {
               <Button
                 accessoryLeft={BellIcon}
                 appearance="outline"
-                status={subscribtionStatus ? "basic" : "control"}
+                status={subscriptionStatus ? "basic" : "control"}
                 size="tiny"
+                onPress={() => {
+                  showNotification({
+                    title: "You pressed it!",
+                    message: "The notification has been triggered",
+                    onPress: () =>
+                      Alert.alert("Alert", "You clicked the notification!"),
+                    additionalProps: {
+                      type: "error",
+                    },
+                  });
+                }}
               >
-                {subscribtionStatus ? "Subscribed" : "Subscribe"}
+                {subscriptionStatus ? "Subscribed" : "Subscribe"}
               </Button>
             </TouchableOpacity>
           </View>
@@ -265,4 +278,4 @@ const PublicProfile = ({ route, navigation }) => {
   );
 };
 
-export default PublicProfile;
+export default withInAppNotification(PublicProfile);
