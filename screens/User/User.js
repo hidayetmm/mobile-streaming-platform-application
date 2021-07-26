@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from "react";
 import { StyleSheet, View, Image, useWindowDimensions } from "react-native";
-import { Button, Card, Layout, Text, Icon } from "@ui-kitten/components";
+import { Button, Card, Layout, Text, Icon, Input } from "@ui-kitten/components";
 import LoginPage from "../../navigation/Login/LoginPage";
 import Context from "../../Context/Context";
 import { images, icons, SIZES, FONTS, COLORS } from "../../constants";
@@ -12,8 +12,8 @@ const User = () => {
   const windowHeight = useWindowDimensions().height;
 
   const Header = (props) => (
-    <View {...props}>
-      <Text category="h6">Wallet balance:</Text>
+    <View style={[props.style, styles.headerContainer]} {...props}>
+      <Text category="h6">Settings</Text>
     </View>
   );
 
@@ -48,10 +48,8 @@ const User = () => {
       backgroundColor: "#222B45",
     },
     content2: {
-      justifyContent: "space-around",
-      alignItems: "center",
+      height: 350,
       marginTop: 10,
-      height: 200,
       width: windowWidth * 0.92,
       backgroundColor: "#222B45",
     },
@@ -69,6 +67,12 @@ const User = () => {
       width: 45,
       height: 45,
     },
+    headerContainer: {
+      borderWidth: 1,
+      borderColor: "yellow",
+      flexDirection: "column",
+      justifyContent: "flex-start",
+    },
     footerContainer: {
       flexDirection: "row",
       justifyContent: "flex-end",
@@ -76,6 +80,7 @@ const User = () => {
     footerControl: {
       marginHorizontal: 8,
     },
+    input: {},
   });
 
   const { setLoggedIn, loggedIn, userDetails } = useContext(Context);
@@ -110,8 +115,10 @@ const User = () => {
         </View>
       </Layout>
       <Layout style={styles.container} level="4">
-        <Card style={styles.content2} header={Header} footer={Footer}>
-          <Text>300 TC</Text>
+        <Card style={styles.content2} header={Header}>
+          <Input style={styles.input} label="First name" />
+          <Input style={styles.input} label="Last name" />
+          <Input style={styles.input} label="Bio" />
         </Card>
       </Layout>
     </>
