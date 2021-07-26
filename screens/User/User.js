@@ -1,13 +1,48 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import { StyleSheet, View, Image, useWindowDimensions } from "react-native";
 import { Button, Card, Layout, Text, Icon, Input } from "@ui-kitten/components";
 import LoginPage from "../../navigation/Login/LoginPage";
 import Context from "../../Context/Context";
 import { images, icons, SIZES, FONTS, COLORS } from "../../constants";
+import Config from "react-native-config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const StarIcon = (props) => <Icon {...props} name="log-out-outline" />;
 
 const User = () => {
+  const [userInfo, setUserInfo] = useState({});
+
+  useEffect(() => {
+    getUserInfo().catch((err) => console.log(err));
+  }, []);
+
+  const getUserInfo = async () => {
+    try {
+      const value = await AsyncStorage.getItem("userData");
+      if (value !== null) {
+        // We have data!!
+        const userData = JSON.parse(value);
+        const accessToken = userData["access_token"];
+
+        const url = `${Config.REACT_APP_TOOT_BACKEND}users/info?access_token=${accessToken}`;
+
+        axios.get(url).then(({ data }) => {
+          const userSettingsInfo = {
+            firstName: data.item["first_name"],
+            lastName: data.item["last_name"],
+            username: data.item["username"],
+            bio: data.item["bio"],
+          };
+          setUserInfo(userSettingsInfo);
+          console.log(data["item"]);
+        });
+      }
+    } catch (error) {
+      console.log("error");
+    }
+  };
+
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
@@ -116,9 +151,27 @@ const User = () => {
       </Layout>
       <Layout style={styles.container} level="4">
         <Card style={styles.content2} header={Header}>
-          <Input style={styles.input} label="First name" />
-          <Input style={styles.input} label="Last name" />
-          <Input style={styles.input} label="Bio" />
+          <Input
+            value={userInfo["firstName"]}
+            style={styles.input}
+            label="First name"
+          />
+          <Input
+            value={userInfo["lastName"]}
+            style={styles.input}
+            label="Last name"
+          />
+          <Input
+            value={userInfo["username"]}
+            style={styles.input}
+            label="Username"
+          />
+          <Input
+            placeholder={userInfo["bio"] === null ? "Bio" : userInfo["bio"]}
+            value={userInfo["bio"]}
+            style={styles.input}
+            label="Bio"
+          />
         </Card>
       </Layout>
     </>

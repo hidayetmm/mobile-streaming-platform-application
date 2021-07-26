@@ -86,9 +86,7 @@ const Login = () => {
         value={field.value}
         onChangeText={field.onChange}
         placeholder={placeholder}
-        secureTextEntry={
-          name === "password" || name === "passwordConfirmer" ? true : false
-        }
+        secureTextEntry={name === "password" || name === "passwordConfirmer"}
       />
     );
   };
@@ -107,6 +105,7 @@ const Login = () => {
       })
       .then((res) => {
         const user = JSON.parse(res.config.data);
+        console.log(user);
 
         const userData = {
           username: user.identifier.user,
