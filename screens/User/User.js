@@ -35,7 +35,6 @@ const User = () => {
             bio: data.item["bio"],
           };
           setUserInfo(userSettingsInfo);
-          console.log(data["item"]);
         });
       }
     } catch (error) {
@@ -54,8 +53,12 @@ const User = () => {
 
   const Footer = (props) => (
     <View {...props} style={[props.style, styles.footerContainer]}>
-      <Button style={styles.footerControl}>Get coins</Button>
-      <Button style={styles.footerControl}>Sell coins</Button>
+      <Button disabled style={styles.footerControl}>
+        Cancel
+      </Button>
+      <Button disabled style={styles.footerControl}>
+        Save
+      </Button>
     </View>
   );
 
@@ -83,7 +86,7 @@ const User = () => {
       backgroundColor: "#222B45",
     },
     content2: {
-      height: 350,
+      height: 410,
       marginTop: 10,
       width: windowWidth * 0.92,
       backgroundColor: "#222B45",
@@ -110,7 +113,7 @@ const User = () => {
     },
     footerContainer: {
       flexDirection: "row",
-      justifyContent: "flex-end",
+      justifyContent: "center",
     },
     footerControl: {
       marginHorizontal: 8,
@@ -123,11 +126,11 @@ const User = () => {
 
   return loggedIn ? (
     <>
-      <Layout style={styles.topContainer} level="4">
-        <Card appearance="outline" style={styles.cardHeader}>
-          <Text category="h6">Account</Text>
-        </Card>
-      </Layout>
+      {/*<Layout style={styles.topContainer} level="4">*/}
+      {/*  <Card appearance="outline" style={styles.cardHeader}>*/}
+      {/*    <Text category="h6">Account</Text>*/}
+      {/*  </Card>*/}
+      {/*</Layout>*/}
 
       <Layout style={styles.container}>
         <View style={styles.content}>
@@ -150,9 +153,14 @@ const User = () => {
         </View>
       </Layout>
       <Layout style={styles.container} level="4">
-        <Card style={styles.content2} header={Header}>
+        <Card style={styles.content2} header={Header} footer={Footer}>
           <Input
             value={userInfo["firstName"]}
+            onChangeText={(text) =>
+              setUserInfo((prevState) => {
+                return { ...prevState, firstName: text };
+              })
+            }
             style={styles.input}
             label="First name"
           />
