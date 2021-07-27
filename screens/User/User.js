@@ -1,17 +1,61 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { StyleSheet, View, Image, useWindowDimensions } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Image,
+  useWindowDimensions,
+  TouchableOpacity,
+} from "react-native";
 import { Button, Card, Layout, Text, Icon, Input } from "@ui-kitten/components";
 import LoginPage from "../../navigation/Login/LoginPage";
 import Context from "../../Context/Context";
 import { images, icons, SIZES, FONTS, COLORS } from "../../constants";
 import Config from "react-native-config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useForm, useController, Controller } from "react-hook-form";
 
 const StarIcon = (props) => <Icon {...props} name="log-out-outline" />;
 
 const User = () => {
   const [userInfo, setUserInfo] = useState({});
+  const [editMode, setEditMode] = useState(false);
+
+  const {
+    control,
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm({
+    // defaultValues: {
+    //   firstName: userInfo["firstName"],
+    //   lastName: userInfo["lastName"],
+    //   username: userInfo["username"],
+    //   bio: userInfo["bio"],
+    // },
+  });
+
+  const InputField = ({ name, control, label, defaultValue }) => {
+    const { field } = useController({
+      control,
+      defaultValue: defaultValue,
+      name,
+      rules: {
+        required: name !== "bio",
+      },
+    });
+    console.log(field);
+    return (
+      <Input
+        autoCapitalize="none"
+        autoCorrect={false}
+        onChangeText={field.onChange}
+        placeholder={defaultValue}
+        label={label}
+        disabled={!editMode}
+      />
+    );
+  };
 
   useEffect(() => {
     getUserInfo().catch((err) => console.log(err));
@@ -33,6 +77,7 @@ const User = () => {
             lastName: data.item["last_name"],
             username: data.item["username"],
             bio: data.item["bio"],
+            avatarURL: data.item["avatar_url"],
           };
           setUserInfo(userSettingsInfo);
         });
@@ -42,25 +87,12 @@ const User = () => {
     }
   };
 
+  const updateUserInfo = (data) => {
+    console.log(data);
+  };
+
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
-
-  const Header = (props) => (
-    <View style={[props.style, styles.headerContainer]} {...props}>
-      <Text category="h6">Settings</Text>
-    </View>
-  );
-
-  const Footer = (props) => (
-    <View {...props} style={[props.style, styles.footerContainer]}>
-      <Button disabled style={styles.footerControl}>
-        Cancel
-      </Button>
-      <Button disabled style={styles.footerControl}>
-        Save
-      </Button>
-    </View>
-  );
 
   const styles = StyleSheet.create({
     topContainer: {
@@ -87,9 +119,14 @@ const User = () => {
     },
     content2: {
       height: 410,
+      padding: 20,
       marginTop: 10,
       width: windowWidth * 0.92,
       backgroundColor: "#222B45",
+      flexDirection: "column",
+      justifyContent: "space-between",
+      // borderWidth: 1,
+      // borderColor: "yellow",
     },
     userContainer: {
       justifyContent: "space-between",
@@ -101,28 +138,28 @@ const User = () => {
       justifyContent: "flex-start",
       height: 120,
     },
-    userIcon: {
-      width: 45,
-      height: 45,
+    icon: {
+      width: 20,
+      height: 20,
     },
     headerContainer: {
-      borderWidth: 1,
-      borderColor: "yellow",
-      flexDirection: "column",
-      justifyContent: "flex-start",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
+    footerControl: {
+      marginHorizontal: 8,
+    },
+    inputView: {
+      height: "80%",
+      justifyContent: "space-evenly",
     },
     footerContainer: {
       flexDirection: "row",
       justifyContent: "center",
     },
-    footerControl: {
-      marginHorizontal: 8,
-    },
-    input: {},
   });
 
   const { setLoggedIn, loggedIn, userDetails } = useContext(Context);
-  useEffect(() => {}, [userDetails]);
 
   return loggedIn ? (
     <>
@@ -135,7 +172,14 @@ const User = () => {
       <Layout style={styles.container}>
         <View style={styles.content}>
           <View style={styles.userContainer}>
-            <Icon fill="#8F9BB3" name="person" style={styles.userIcon} />
+            <Image
+              style={{
+                width: 45,
+                height: 45,
+                borderRadius: 100,
+              }}
+              source={{ uri: userInfo["avatarURL"] }}
+            />
             <Text category="h6">@{userDetails.username}</Text>
             <Text appearance="hint" category="s1">
               Online
@@ -153,34 +197,97 @@ const User = () => {
         </View>
       </Layout>
       <Layout style={styles.container} level="4">
-        <Card style={styles.content2} header={Header} footer={Footer}>
-          <Input
-            value={userInfo["firstName"]}
-            onChangeText={(text) =>
-              setUserInfo((prevState) => {
-                return { ...prevState, firstName: text };
-              })
-            }
-            style={styles.input}
-            label="First name"
-          />
-          <Input
-            value={userInfo["lastName"]}
-            style={styles.input}
-            label="Last name"
-          />
-          <Input
-            value={userInfo["username"]}
-            style={styles.input}
-            label="Username"
-          />
-          <Input
-            placeholder={userInfo["bio"] === null ? "Bio" : userInfo["bio"]}
-            value={userInfo["bio"]}
-            style={styles.input}
-            label="Bio"
-          />
-        </Card>
+        <View style={styles.content2}>
+          <View style={styles.headerContainer}>
+            <Text category="h6">Settings</Text>
+            <TouchableOpacity
+              onPress={() => setEditMode((prevState) => !prevState)}
+            >
+              <Icon
+                name="edit-2-outline"
+                style={styles.icon}
+                fill={editMode ? COLORS.primary : COLORS.white}
+              />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.inputView}>
+            {/*<Controller*/}
+            {/*  name="firstName"*/}
+            {/*  control={control}*/}
+            {/*  render={({ field: { onChange, value } }) => (*/}
+            {/*    <Input*/}
+            {/*      onChangeText={onChange}*/}
+            {/*      value={value}*/}
+            {/*      defaultValue={userInfo["firstName"]}*/}
+            {/*    />*/}
+            {/*  )}*/}
+            {/*/>*/}
+            <InputField
+              control={control}
+              label="First name"
+              name="firstName"
+              defaultValue={userInfo["firstName"]}
+            />
+            {errors.firstName && (
+              <Text category="c1" style={{ color: "white" }}>
+                This is required.
+              </Text>
+            )}
+
+            <InputField
+              control={control}
+              label="Last name"
+              name="lastName"
+              defaultValue={userInfo["lastName"]}
+            />
+            {errors.lastName && (
+              <Text category="c1" style={{ color: "white" }}>
+                This is required.
+              </Text>
+            )}
+            <InputField
+              control={control}
+              label="Username"
+              name="username"
+              defaultValue={userInfo["username"]}
+            />
+            {errors.username && (
+              <Text category="c1" style={{ color: "white" }}>
+                This is required.
+              </Text>
+            )}
+            <InputField
+              control={control}
+              label="Bio"
+              name="bio"
+              defaultValue={userInfo["bio"]}
+            />
+            {errors.bio && (
+              <Text category="c1" style={{ color: "white" }}>
+                This is required.
+              </Text>
+            )}
+          </View>
+          <View style={styles.footerContainer}>
+            <Button
+              size="small"
+              style={styles.footerControl}
+              status="basic"
+              disabled={!editMode}
+              onPress={() => setEditMode(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              onPress={handleSubmit(updateUserInfo)}
+              size="small"
+              style={styles.footerControl}
+              disabled={!editMode}
+            >
+              Save
+            </Button>
+          </View>
+        </View>
       </Layout>
     </>
   ) : (

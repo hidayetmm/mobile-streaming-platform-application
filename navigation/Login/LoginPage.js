@@ -45,7 +45,6 @@ const Login = () => {
       width: windowWidth * 0.8,
       height: windowHeight * (loginRegisterToggle === "login" ? 0.27 : 0.5),
     },
-    logo: {},
     inputView: {
       display: "flex",
       flexDirection: "column",
