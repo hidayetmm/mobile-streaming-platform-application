@@ -25,15 +25,9 @@ const User = () => {
     control,
     handleSubmit,
     register,
+    reset,
     formState: { errors },
-  } = useForm({
-    // defaultValues: {
-    //   firstName: userInfo["firstName"],
-    //   lastName: userInfo["lastName"],
-    //   username: userInfo["username"],
-    //   bio: userInfo["bio"],
-    // },
-  });
+  } = useForm({});
 
   const InputField = ({ name, control, label, defaultValue }) => {
     const { field } = useController({
@@ -50,7 +44,7 @@ const User = () => {
         autoCapitalize="none"
         autoCorrect={false}
         onChangeText={field.onChange}
-        placeholder={defaultValue}
+        defaultValue={defaultValue}
         label={label}
         disabled={!editMode}
       />
@@ -80,6 +74,15 @@ const User = () => {
             avatarURL: data.item["avatar_url"],
           };
           setUserInfo(userSettingsInfo);
+
+          // Set default values for input fields after fetching
+          const inputFieldDefaultValues = {
+            firstName: data.item["first_name"],
+            lastName: data.item["last_name"],
+            username: data.item["username"],
+            bio: data.item["bio"],
+          };
+          reset(inputFieldDefaultValues);
         });
       }
     } catch (error) {
