@@ -24,7 +24,6 @@ const User = () => {
   const {
     control,
     handleSubmit,
-    register,
     reset,
     formState: { errors },
   } = useForm({});
@@ -166,12 +165,6 @@ const User = () => {
 
   return loggedIn ? (
     <>
-      {/*<Layout style={styles.topContainer} level="4">*/}
-      {/*  <Card appearance="outline" style={styles.cardHeader}>*/}
-      {/*    <Text category="h6">Account</Text>*/}
-      {/*  </Card>*/}
-      {/*</Layout>*/}
-
       <Layout style={styles.container}>
         <View style={styles.content}>
           <View style={styles.userContainer}>
@@ -214,17 +207,6 @@ const User = () => {
             </TouchableOpacity>
           </View>
           <View style={styles.inputView}>
-            {/*<Controller*/}
-            {/*  name="firstName"*/}
-            {/*  control={control}*/}
-            {/*  render={({ field: { onChange, value } }) => (*/}
-            {/*    <Input*/}
-            {/*      onChangeText={onChange}*/}
-            {/*      value={value}*/}
-            {/*      defaultValue={userInfo["firstName"]}*/}
-            {/*    />*/}
-            {/*  )}*/}
-            {/*/>*/}
             <InputField
               control={control}
               label="First name"
