@@ -16,7 +16,7 @@ import {
 } from "react-native";
 import { SIZES, FONTS, COLORS } from "../../../constants";
 
-const BrowseCategories = () => {
+const BrowseCategories = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
   const [streams, setStreams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -68,7 +68,12 @@ const BrowseCategories = () => {
           alignItems: "flex-start",
           justifyContent: "center",
         }}
-        //   onPress={() => onSelectCategory(item)}
+        onPress={() =>
+          navigation.navigate("Home", {
+            screen: "CategoryPage",
+            params: item,
+          })
+        }
       >
         <View
           style={{
@@ -101,62 +106,63 @@ const BrowseCategories = () => {
     </SkeletonContent>
   );
 
-  const renderItemFindStreams = ({ item }) => (
-    <SkeletonContent
-      isLoading={isLoading}
-      layout={[
-        {
-          key: item.title,
-          width: 150,
-          height: 80,
-          marginRight: 10,
-          marginLeft: 15,
-        },
-      ]}
-      boneColor="#121212"
-      highlightColor="#333333"
-    >
-      <TouchableOpacity
-        style={{
-          width: windowWidth * 0.4,
-          padding: SIZES.padding,
-          paddingBottom: SIZES.padding * 2,
-          borderRadius: SIZES.radius,
-          alignItems: "flex-start",
-          justifyContent: "center",
-        }}
-        //   onPress={() => onSelectCategory(item)}
-      >
-        <View
-          style={{
-            width: "100%",
-            height: 80,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Image
-            source={{ uri: item.avatar_url }}
-            resizeMode="cover"
-            style={{
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              borderRadius: SIZES.radius * 2,
-            }}
-          />
-          <Text
-            style={{
-              color: COLORS.white,
-              ...FONTS.body3,
-            }}
-          >
-            {item.title}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    </SkeletonContent>
-  );
+  // const renderItemFindStreams = ({ item }) => (
+  //   <SkeletonContent
+  //     isLoading={isLoading}
+  //     layout={[
+  //       {
+  //         key: item.title,
+  //         width: 150,
+  //         height: 80,
+  //         marginRight: 10,
+  //         marginLeft: 15,
+  //       },
+  //     ]}
+  //     boneColor="#121212"
+  //     highlightColor="#333333"
+  //   >
+  //     <TouchableOpacity
+  //       style={{
+  //         width: windowWidth * 0.4,
+  //         padding: SIZES.padding,
+  //         paddingBottom: SIZES.padding * 2,
+  //         borderRadius: SIZES.radius,
+  //         alignItems: "flex-start",
+  //         justifyContent: "center",
+  //       }}
+  //       //   onPress={() => onSelectCategory(item)}
+  //     >
+  //       <View
+  //         style={{
+  //           width: "100%",
+  //           height: 80,
+  //           justifyContent: "center",
+  //           alignItems: "center",
+  //         }}
+  //       >
+  //         <Image
+  //           source={{ uri: item.avatar_url }}
+  //           resizeMode="cover"
+  //           style={{
+  //             position: "absolute",
+  //             width: "100%",
+  //             height: "100%",
+  //             borderRadius: SIZES.radius * 2,
+  //           }}
+  //         />
+  //         <Text
+  //           style={{
+  //             color: COLORS.white,
+  //             ...FONTS.body3,
+  //           }}
+  //         >
+  //           {item.title}
+  //         </Text>
+  //       </View>
+  //     </TouchableOpacity>
+  //   </SkeletonContent>
+  // );
+
   return (
     <View
       style={{

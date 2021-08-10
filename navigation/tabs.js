@@ -51,7 +51,7 @@ const CustomTabBar = ({ props }) => {
             height: 30,
             backgroundColor: COLORS.black,
           }}
-        ></View>
+        />
         <BottomTabBar {...props} />
       </View>
     );

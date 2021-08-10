@@ -6,7 +6,7 @@ const HomePage = ({ navigation }) => {
   return (
     <>
       <Recommended navigation={navigation} />
-      <BrowseCategories />
+      <BrowseCategories navigation={navigation} />
     </>
   );
 };
