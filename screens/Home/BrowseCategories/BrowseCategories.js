@@ -15,6 +15,7 @@ import {
   useWindowDimensions,
 } from "react-native";
 import { SIZES, FONTS, COLORS } from "../../../constants";
+import { SvgUri } from "react-native-svg";
 
 const BrowseCategories = ({ navigation }) => {
   const [categories, setCategories] = useState([]);
@@ -93,14 +94,22 @@ const BrowseCategories = ({ navigation }) => {
               borderRadius: SIZES.radius * 2,
             }}
           />
-          <Text
+          <View
             style={{
-              color: COLORS.white,
-              ...FONTS.body3,
+              flexDirection: "row",
             }}
           >
-            {item.title}
-          </Text>
+            <SvgUri height={20} width={20} uri={item.icon_url} />
+            <Text
+              style={{
+                marginLeft: 10,
+                color: COLORS.white,
+                ...FONTS.body3,
+              }}
+            >
+              {item.title}
+            </Text>
+          </View>
         </View>
       </TouchableOpacity>
     </SkeletonContent>

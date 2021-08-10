@@ -150,13 +150,6 @@ const Recommended = ({ navigation }) => {
         paddingBottom: 0,
       }}
     >
-      {/* <FlatList
-        data={streams}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-      /> */}
       <Carousel
         data={streams}
         renderItem={renderItem}
