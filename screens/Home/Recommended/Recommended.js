@@ -11,7 +11,7 @@ import axios from "axios";
 import { SIZES, FONTS, COLORS } from "../../../constants";
 import Carousel from "react-native-snap-carousel";
 
-const Recommended = ({ navigation }) => {
+const Recommended = ({ navigation, setStreamCount }) => {
   const [streams, setStreams] = useState([]);
 
   const windowWidth = useWindowDimensions().width;
@@ -37,6 +37,7 @@ const Recommended = ({ navigation }) => {
           });
 
           setStreams([...streamsArr]);
+          setStreamCount(streamsArr.length);
         }
       });
   };

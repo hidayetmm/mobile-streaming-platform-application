@@ -5,18 +5,16 @@ import SkeletonContent from "react-native-skeleton-content-nonexpo";
 import { Text } from "@ui-kitten/components";
 import {
   View,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   Image,
   FlatList,
-  Animated,
   useWindowDimensions,
 } from "react-native";
 import { SIZES, FONTS, COLORS } from "../../../constants";
 import { SvgUri } from "react-native-svg";
 
-const BrowseCategories = ({ navigation }) => {
+const BrowseCategories = ({ navigation, streamCount }) => {
   const [categories, setCategories] = useState([]);
   const [streams, setStreams] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -134,32 +132,35 @@ const BrowseCategories = ({ navigation }) => {
         keyExtractor={(item) => `${item.title}`}
         renderItem={renderItemCategories}
       />
-      <View
-        style={{
-          paddingHorizontal: SIZES.padding,
-          paddingVertical: 100,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Image
-          resizeMode="contain"
-          style={{
-            position: "absolute",
-            width: "100%",
-          }}
-          source={require("../../../assets/images/wave.jpeg")}
-        />
+      <TouchableOpacity>
         <View
           style={{
-            alignSelf: "flex-start",
-            paddingHorizontal: 25,
+            paddingHorizontal: SIZES.padding,
+            paddingVertical: 90,
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          <Text category="h5">Find streams to watch</Text>
-          <Text category="c2">See who's streaming now</Text>
+          <Image
+            resizeMode="contain"
+            source={require("../../../assets/images/wave.jpeg")}
+            style={{
+              position: "absolute",
+              width: "100%",
+            }}
+          />
+          <View
+            style={{
+              alignSelf: "flex-start",
+              paddingHorizontal: 25,
+            }}
+          >
+            <Text category="s2">Find streams to watch</Text>
+            <Text category="h6">See who's streaming now</Text>
+            <Text category="s2">{streamCount} live now</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   );
 };

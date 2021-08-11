@@ -1,20 +1,23 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import * as RootNavigation from "./RootNavigation";
 import { withInAppNotification } from "react-native-in-app-notification";
-
 import {
   View,
   Text,
-  SafeAreaView,
-  StyleSheet,
   TouchableOpacity,
   Image,
-  FlatList,
-  Animated,
+  StyleSheet,
+  useWindowDimensions,
+  Modal,
 } from "react-native";
 import { images, icons, SIZES, FONTS, COLORS } from "../constants";
+import { Input, Icon } from "@ui-kitten/components";
 
 const Header = () => {
+  const [isSearchBarActive, setIsSearchBarActive] = useState(false);
+
+  const windowHeight = useWindowDimensions().height;
+
   useEffect(() => {});
 
   const syncNotifications = async (
@@ -223,55 +226,89 @@ const Header = () => {
         backgroundColor: COLORS.black,
       }}
     >
-      <TouchableOpacity
-        style={{
-          flexDirection: "row",
-          width: 80,
-          paddingLeft: SIZES.padding * 2,
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-        onPress={() => RootNavigation.navigate("HomePage")}
-      >
-        <Image
-          source={images.logo}
-          resizeMode="contain"
-          style={{
-            width: 30,
-            height: 30,
-          }}
-        />
-        <Text style={{ color: "#fff", paddingLeft: 10, ...FONTS.h3 }}>
-          toot
-        </Text>
-      </TouchableOpacity>
+      {isSearchBarActive ? (
+        <>
+          <View style={styles.searchBar}>
+            <Input placeholder="Search" style={styles.input} />
+            <TouchableOpacity onPress={() => setIsSearchBarActive(false)}>
+              <Icon style={styles.icon} fill="#fff" name="close-outline" />
+            </TouchableOpacity>
+          </View>
+        </>
+      ) : (
+        <>
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              width: 80,
+              paddingLeft: SIZES.padding * 2,
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+            onPress={() => RootNavigation.navigate("HomePage")}
+          >
+            <Image
+              source={images.logo}
+              resizeMode="contain"
+              style={{
+                width: 30,
+                height: 30,
+              }}
+            />
+            <Text style={{ color: "#fff", paddingLeft: 10, ...FONTS.h3 }}>
+              toot
+            </Text>
+          </TouchableOpacity>
 
-      <View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      />
-      <TouchableOpacity
-        style={{
-          width: 50,
-          paddingRight: SIZES.padding * 2,
-          justifyContent: "center",
-        }}
-      >
-        <Image
-          source={icons.search}
-          resizeMode="contain"
-          style={{
-            width: 25,
-            height: 25,
-            tintColor: COLORS.white,
-          }}
-        />
-      </TouchableOpacity>
+          <View
+            style={{
+              flex: 1,
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          />
+          <TouchableOpacity
+            style={{
+              width: 50,
+              paddingRight: SIZES.padding * 2,
+              justifyContent: "center",
+            }}
+            onPress={() => setIsSearchBarActive(true)}
+          >
+            <Image
+              source={icons.search}
+              resizeMode="contain"
+              style={{
+                width: 25,
+                height: 25,
+                tintColor: COLORS.white,
+              }}
+            />
+          </TouchableOpacity>
+        </>
+      )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  searchBar: {
+    // borderWidth: 1,
+    // borderColor: "yellow",
+    width: "100%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: SIZES.padding * 2,
+  },
+  input: {
+    flexGrow: 1,
+    paddingRight: SIZES.padding * 2,
+  },
+  icon: {
+    width: 32,
+    height: 32,
+  },
+});
 
 export default Header;
