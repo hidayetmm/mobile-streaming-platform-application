@@ -28,8 +28,6 @@ const BrowseCategories = ({ navigation }) => {
     axios
       .get(Config.REACT_APP_TOOT_BACKEND + "tags")
       .then(({ data }) => {
-        // local_storage.setItem(key, JSON.stringify(res.data));
-
         setIsLoading(false);
         setCategories(data);
       })

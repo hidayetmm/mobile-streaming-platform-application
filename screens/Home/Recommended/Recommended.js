@@ -3,24 +3,18 @@ import Config from "react-native-config";
 import {
   View,
   Text,
-  SafeAreaView,
-  StyleSheet,
   TouchableOpacity,
   Image,
-  FlatList,
-  Animated,
   useWindowDimensions,
 } from "react-native";
 import axios from "axios";
-import { SIZES, FONTS, COLORS, icons } from "../../../constants";
+import { SIZES, FONTS, COLORS } from "../../../constants";
 import Carousel from "react-native-snap-carousel";
 
 const Recommended = ({ navigation }) => {
   const [streams, setStreams] = useState([]);
-  const [isLive, setIsLive] = useState([]);
 
   const windowWidth = useWindowDimensions().width;
-  const windowHeight = useWindowDimensions().height;
 
   const getStreams = () => {
     axios

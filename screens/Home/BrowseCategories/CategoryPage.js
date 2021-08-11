@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text } from "@ui-kitten/components";
 import { COLORS, FONTS, SIZES, icons, images } from "../../../constants";
 import {
@@ -10,17 +10,46 @@ import {
 } from "react-native";
 import { SvgUri } from "react-native-svg";
 import Carousel from "react-native-snap-carousel";
+import axios from "axios";
+import Config from "react-native-config";
+import LinearGradient from "react-native-linear-gradient";
 
-const CategoryPage = ({ route }) => {
+const CategoryPage = ({ route, navigation }) => {
   const [streams, setStreams] = useState([]);
 
-  console.log(route.params);
   const item = route.params;
+  console.log(item);
 
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
 
-  const getStreamsByCategory = () => {};
+  useEffect(() => {
+    getStreamsByCategory();
+  }, []);
+
+  const getStreamsByCategory = () => {
+    axios
+      .get(
+        Config.REACT_APP_TOOT_BACKEND +
+          "streams/browse?stream_type_id=1&tag_slugs[]=" +
+          item.slug
+      )
+      .then(({ data }) => {
+        const streamsArr = data.items.map((item) => {
+          return {
+            id: item.id,
+            stream_thumbnail_url: item.stream_thumbnail_url,
+            title: item.title,
+            viewer_count: item.viewer_count,
+            username: item.user.username,
+            avatarURL: item.user.avatar_url,
+            streamURL: item.wowza_player_hls_playback_url,
+          };
+        });
+
+        setStreams([...streamsArr]);
+      });
+  };
 
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -116,21 +145,41 @@ const CategoryPage = ({ route }) => {
   );
 
   return (
-    <View>
-      <View style={styles.mainView}>
-        <Text category="h1">{item.label}</Text>
-        <SvgUri height={50} width={50} uri={item.icon_url} />
-      </View>
+    <LinearGradient
+      colors={[
+        COLORS.black,
+        item?.slug === "music"
+          ? "#5D26C1"
+          : item?.slug === "art"
+          ? "#00467F"
+          : item?.slug === "events"
+          ? "#076585"
+          : item?.slug === "fashion"
+          ? "rgba(196,113,237,0.7)"
+          : item?.slug === "test"
+          ? "#2B32B2"
+          : null,
+
+        COLORS.black,
+      ]}
+      style={styles.linearGradient}
+    >
       <View>
-        <Carousel
-          data={streams}
-          renderItem={renderItem}
-          sliderWidth={windowWidth}
-          itemWidth={windowWidth - 80}
-          layout="default"
-        />
+        <View style={styles.mainView}>
+          <Text category="h1">{item.label}</Text>
+          <SvgUri height={35} width={35} uri={item.icon_url} />
+        </View>
+        <View style={styles.carouselView}>
+          <Carousel
+            data={streams}
+            renderItem={renderItem}
+            sliderWidth={windowWidth}
+            itemWidth={windowWidth - 80}
+            layout="default"
+          />
+        </View>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -141,13 +190,18 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: SIZES.padding * 2,
-    borderWidth: 1,
-    borderColor: "yellow",
+    paddingHorizontal: SIZES.padding * 2,
+    paddingVertical: SIZES.padding * 3.5,
   },
   icon: {
     width: 100,
     height: 100,
     backgroundColor: COLORS.primary,
+  },
+  carouselView: {
+    paddingVertical: SIZES.padding,
+  },
+  linearGradient: {
+    height: "100%",
   },
 });
