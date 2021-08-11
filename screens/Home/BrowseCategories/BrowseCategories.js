@@ -120,9 +120,9 @@ const BrowseCategories = ({ navigation }) => {
     >
       <Text
         style={{
-          color: COLORS.white,
           padding: SIZES.padding,
           ...FONTS.body2,
+          fontWeight: "900",
         }}
       >
         Browse categories
@@ -147,16 +147,18 @@ const BrowseCategories = ({ navigation }) => {
           style={{
             position: "absolute",
             width: "100%",
-            height: 200,
           }}
           source={require("../../../assets/images/wave.jpeg")}
         />
-        <Text style={{ marginLeft: 10 }} category="h5">
-          Find streams to watch
-        </Text>
-        <Text style={{ marginLeft: 10 }} category="c2">
-          See who's streaming now
-        </Text>
+        <View
+          style={{
+            alignSelf: "flex-start",
+            paddingHorizontal: 25,
+          }}
+        >
+          <Text category="h5">Find streams to watch</Text>
+          <Text category="c2">See who's streaming now</Text>
+        </View>
       </View>
     </View>
   );
