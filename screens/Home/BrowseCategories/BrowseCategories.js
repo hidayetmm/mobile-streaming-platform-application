@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Config from "react-native-config";
 import SkeletonContent from "react-native-skeleton-content-nonexpo";
-
+import { Text } from "@ui-kitten/components";
 import {
   View,
-  Text,
   SafeAreaView,
   StyleSheet,
   TouchableOpacity,
@@ -113,63 +112,6 @@ const BrowseCategories = ({ navigation }) => {
     </SkeletonContent>
   );
 
-  // const renderItemFindStreams = ({ item }) => (
-  //   <SkeletonContent
-  //     isLoading={isLoading}
-  //     layout={[
-  //       {
-  //         key: item.title,
-  //         width: 150,
-  //         height: 80,
-  //         marginRight: 10,
-  //         marginLeft: 15,
-  //       },
-  //     ]}
-  //     boneColor="#121212"
-  //     highlightColor="#333333"
-  //   >
-  //     <TouchableOpacity
-  //       style={{
-  //         width: windowWidth * 0.4,
-  //         padding: SIZES.padding,
-  //         paddingBottom: SIZES.padding * 2,
-  //         borderRadius: SIZES.radius,
-  //         alignItems: "flex-start",
-  //         justifyContent: "center",
-  //       }}
-  //       //   onPress={() => onSelectCategory(item)}
-  //     >
-  //       <View
-  //         style={{
-  //           width: "100%",
-  //           height: 80,
-  //           justifyContent: "center",
-  //           alignItems: "center",
-  //         }}
-  //       >
-  //         <Image
-  //           source={{ uri: item.avatar_url }}
-  //           resizeMode="cover"
-  //           style={{
-  //             position: "absolute",
-  //             width: "100%",
-  //             height: "100%",
-  //             borderRadius: SIZES.radius * 2,
-  //           }}
-  //         />
-  //         <Text
-  //           style={{
-  //             color: COLORS.white,
-  //             ...FONTS.body3,
-  //           }}
-  //         >
-  //           {item.title}
-  //         </Text>
-  //       </View>
-  //     </TouchableOpacity>
-  //   </SkeletonContent>
-  // );
-
   return (
     <View
       style={{
@@ -180,7 +122,6 @@ const BrowseCategories = ({ navigation }) => {
         style={{
           color: COLORS.white,
           padding: SIZES.padding,
-
           ...FONTS.body2,
         }}
       >
@@ -193,6 +134,30 @@ const BrowseCategories = ({ navigation }) => {
         keyExtractor={(item) => `${item.title}`}
         renderItem={renderItemCategories}
       />
+      <View
+        style={{
+          paddingHorizontal: SIZES.padding,
+          paddingVertical: 100,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Image
+          resizeMode="contain"
+          style={{
+            position: "absolute",
+            width: "100%",
+            height: 200,
+          }}
+          source={require("../../../assets/images/wave.jpeg")}
+        />
+        <Text style={{ marginLeft: 10 }} category="h5">
+          Find streams to watch
+        </Text>
+        <Text style={{ marginLeft: 10 }} category="c2">
+          See who's streaming now
+        </Text>
+      </View>
     </View>
   );
 };

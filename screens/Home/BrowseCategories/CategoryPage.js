@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text } from "@ui-kitten/components";
+import { Button, Text } from "@ui-kitten/components";
 import { COLORS, FONTS, SIZES, icons, images } from "../../../constants";
 import {
   Image,
@@ -16,9 +16,9 @@ import LinearGradient from "react-native-linear-gradient";
 
 const CategoryPage = ({ route, navigation }) => {
   const [streams, setStreams] = useState([]);
+  const [isEmpty, setIsEmpty] = useState(false);
 
   const item = route.params;
-  console.log(item);
 
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
@@ -47,7 +47,11 @@ const CategoryPage = ({ route, navigation }) => {
           };
         });
 
-        setStreams([...streamsArr]);
+        if (streamsArr.length < 1) {
+          setIsEmpty(true);
+        } else {
+          setStreams([...streamsArr]);
+        }
       });
   };
 
@@ -170,13 +174,19 @@ const CategoryPage = ({ route, navigation }) => {
           <SvgUri height={35} width={35} uri={item.icon_url} />
         </View>
         <View style={styles.carouselView}>
-          <Carousel
-            data={streams}
-            renderItem={renderItem}
-            sliderWidth={windowWidth}
-            itemWidth={windowWidth - 80}
-            layout="default"
-          />
+          {isEmpty ? (
+            <View style={styles.emptyView}>
+              <Text>No stream available for {item.label}</Text>
+            </View>
+          ) : (
+            <Carousel
+              data={streams}
+              renderItem={renderItem}
+              sliderWidth={windowWidth}
+              itemWidth={windowWidth - 80}
+              layout="default"
+            />
+          )}
         </View>
       </View>
     </LinearGradient>
@@ -203,5 +213,10 @@ const styles = StyleSheet.create({
   },
   linearGradient: {
     height: "100%",
+  },
+  emptyView: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "80%",
   },
 });
