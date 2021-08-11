@@ -11,7 +11,7 @@ import { COLORS, icons } from "../constants";
 const Tab = createBottomTabNavigator();
 
 const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
-  var isSelected = accessibilityState.selected;
+  const isSelected = accessibilityState.selected;
 
   return (
     <View
@@ -27,7 +27,6 @@ const TabBarCustomButton = ({ accessibilityState, children, onPress }) => {
           alignItems: "center",
           height: 60,
           width: "100%",
-
           backgroundColor: isSelected ? COLORS.darkBlack : COLORS.black,
         }}
         onPress={onPress}
@@ -65,6 +64,12 @@ const Tabs = () => {
     <Tab.Navigator
       tabBarOptions={{
         showLabel: false,
+        safeAreaInsets: {
+          top: 0,
+          bottom: isIphoneX() ? 30 : 0,
+          left: 0,
+          right: 0,
+        },
         style: {
           borderTopWidth: 0,
           backgroundColor: "transparent",
